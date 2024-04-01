@@ -7,14 +7,11 @@ databaseChangeLog:
             tableName: users
             columns:
               - column:
-                  name: id
-                  type: int
+                  name: username
+                  type: varchar(55)
                   constraints:
                     primaryKey: true
                     nullable: false
-              - column:
-                  name: username
-                  type: varchar(55)
               - column:
                   name: password
                   type: varchar(255)
@@ -27,6 +24,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: int
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -37,11 +35,11 @@ databaseChangeLog:
                   name: description
                   type: varchar(255)
               - column:
-                  name: creator_id
-                  type: int
+                  name: creator_username
+                  type: varchar(55)
                   constraints:
                     foreignKeyName: fk_quizzes_users
-                    references: users(id)
+                    references: users(username)
                     nullable: false
         - createTable:
             tableName: questions
@@ -49,6 +47,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: int
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -67,6 +66,7 @@ databaseChangeLog:
               - column:
                   name: id
                   type: int
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -90,15 +90,16 @@ databaseChangeLog:
               - column:
                   name: id
                   type: int
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: user_id
-                  type: int
+                  name: user_username
+                  type: varchar(55)
                   constraints:
                     foreignKeyName: fk_quizresults_users
-                    references: users(id)
+                    references: users(username)
                     nullable: false
               - column:
                   name: quiz_id

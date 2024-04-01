@@ -1,0 +1,38 @@
+databaseChangeLog:
+  - changeSet:
+      id: Create table AUTHORITIES
+      author:
+        Aktan
+      changes:
+        - createTable:
+            tableName: authorities
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: role
+                  type: varchar(55)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: user_authority
+            columns:
+              - column:
+                  name: user_username
+                  type: varchar(55)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_authority_user_username
+                    references: users(username)
+              - column:
+                  name: authority_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_authority_id
+                    references: authorities(id)
