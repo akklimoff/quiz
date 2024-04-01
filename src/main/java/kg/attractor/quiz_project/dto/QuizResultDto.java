@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QuizResultDto {
     private int id;
-    private int user_id;
+    private String user_username;
     private int quiz_id;
     private int score;
 }

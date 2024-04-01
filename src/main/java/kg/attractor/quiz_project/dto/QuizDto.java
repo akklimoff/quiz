@@ -16,5 +16,6 @@ public class QuizDto {
     private String title;
     @NotBlank(message = "Description cannot be blank")
     private String description;
-    private int creation_id;
+    @NotBlank(message = "Username cannot be blank")
+    private String creator_username;
 }

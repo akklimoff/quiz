@@ -53,18 +53,11 @@ public class SecurityConfig {
 
                                 .requestMatchers(HttpMethod.POST, "/api/register").permitAll()
 
-                                .requestMatchers(HttpMethod.GET, "/api/accounts/**").hasAuthority("DEFAULT")
-                                .requestMatchers(HttpMethod.POST, "/api/accounts/**").hasAuthority("DEFAULT")
-                                .requestMatchers(HttpMethod.PUT, "/api/accounts/**").hasAuthority("DEFAULT")
-                                .requestMatchers(HttpMethod.DELETE, "/accounts/**").hasAuthority("DEFAULT")
+                                .requestMatchers(HttpMethod.GET, "/api/quizzes/**").hasAuthority("DEFAULT")
+                                .requestMatchers(HttpMethod.POST, "/api/quizzes/**").hasAuthority("DEFAULT")
+                                .requestMatchers(HttpMethod.PUT, "/api/quizzes/**").hasAuthority("DEFAULT")
+                                .requestMatchers(HttpMethod.DELETE, "/quizzes/**").hasAuthority("DEFAULT")
 
-                                .requestMatchers(HttpMethod.GET, "/api/transactions/**").hasAuthority("DEFAULT")
-                                .requestMatchers(HttpMethod.POST, "/api/transactions/**").hasAuthority("DEFAULT")
-                                .requestMatchers(HttpMethod.PUT, "/api/transactions/**").hasAuthority("DEFAULT")
-                                .requestMatchers(HttpMethod.DELETE, "/api/transactions/**").hasAuthority("DEFAULT")
-
-                                .requestMatchers(HttpMethod.GET, "/api/admin/**").hasAuthority("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/api/admin/**").hasAuthority("ADMIN")
                                 .anyRequest().permitAll()
                 );
         return http.build();

@@ -11,5 +11,5 @@ public class Quiz {
     private int id;
     private String title;
     private String description;
-    private int creation_id;
+    private String creator_username;
 }
