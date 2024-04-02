@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -34,5 +35,21 @@ public class QuizResultDao {
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
         }
+    }
+
+    public List<QuizResult> findByQuizId(int quizId) {
+        final String sql = "SELECT * FROM quiz_results WHERE quiz_id = ?";
+        return jdbcTemplate.query(sql, new Object[]{quizId}, (rs, rowNum) -> {
+            QuizResult quizResult = new QuizResult();
+
+            quizResult.setId(rs.getInt("id"));
+            quizResult.setUserUsername(rs.getString("user_username"));
+            quizResult.setQuizId(rs.getInt("quiz_id"));
+            quizResult.setScore(rs.getInt("score"));
+            quizResult.setRating(rs.getObject("rating") != null ? rs.getInt("rating") : null);
+
+
+            return quizResult;
+        });
     }
 }

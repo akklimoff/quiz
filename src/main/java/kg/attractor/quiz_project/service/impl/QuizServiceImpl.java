@@ -18,9 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -96,6 +94,11 @@ public class QuizServiceImpl implements QuizService {
         if (!quizExists) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Quiz with ID " + quizId + " not found");
         }
+        String username = auth.getName();
+        Optional<QuizResult> existingResult = quizResultDao.findByQuizIdAndUsername(quizId, username);
+        if (existingResult.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User has already attempted this quiz.");
+        }
         int correctCount = 0;
         for (QuestionAnswerDto submittedAnswer : submission.getAnswers()) {
             Option correctOption = optionDao.findCorrectOptionByQuestionId(submittedAnswer.getQuestionId());
@@ -103,12 +106,8 @@ public class QuizServiceImpl implements QuizService {
                 correctCount++;
             }
         }
-        QuizResultDto result = QuizResultDto.builder()
-                .quizId(quizId)
-                .userUsername(auth.getName())
-                .score(correctCount)
-                .build();
-        result = quizDao.saveQuizResult(result);
+        QuizResultDto result = quizDao.saveQuizResult(new QuizResultDto(0, username, quizId, correctCount, null)); // ID and rating are set assuming defaults
+
 
         return result;
     }
@@ -117,11 +116,25 @@ public class QuizServiceImpl implements QuizService {
     @Transactional
     public void rateQuiz(int quizId, String username, QuizRatingDto ratingDto) {
         Optional<QuizResult> quizResultOptional = quizResultDao.findByQuizIdAndUsername(quizId, username);
-        QuizResult quizResult = quizResultOptional
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Quiz result not found."));
+        QuizResult quizResult = quizResultOptional.orElseThrow(() ->
+                new NoSuchElementException("Quiz result not found."));
+        if (quizResult.getRating() != null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User has already rated this quiz.");
+        }
+
         quizResult.setRating(ratingDto.getRating());
 
         quizResultDao.save(quizResult);
+    }
+
+    @Override
+    public LeaderboardDto getQuizLeaderboard(int quizId) {
+        List<QuizResult> quizResults = quizResultDao.findByQuizId(quizId);
+        List<LeaderboardEntryDto> leaderboard = quizResults.stream()
+                .map(result -> new LeaderboardEntryDto(result.getUserUsername(), result.getScore()))
+                .sorted(Comparator.comparingInt(LeaderboardEntryDto::getScore).reversed())
+                .collect(Collectors.toList());
+        return new LeaderboardDto(leaderboard);
     }
 
 }

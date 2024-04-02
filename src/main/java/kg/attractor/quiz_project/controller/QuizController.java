@@ -45,4 +45,11 @@ public class QuizController {
         quizService.rateQuiz(quizId, username, ratingDto);
         return ResponseEntity.ok("Rated");
     }
+
+    @GetMapping("/{quizId}/leaderboard")
+    public ResponseEntity<LeaderboardDto> getQuizLeaderboard(@PathVariable int quizId) {
+        LeaderboardDto leaderboard = quizService.getQuizLeaderboard(quizId);
+        return ResponseEntity.ok(leaderboard);
+    }
+
 }
