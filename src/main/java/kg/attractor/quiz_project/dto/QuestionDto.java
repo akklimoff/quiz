@@ -6,13 +6,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionDto {
     private int id;
-    private int quiz_id;
+    List<OptionDto> options;
     @NotBlank(message = "Question text cannot be blank")
-    private String question_text;
+    private String questionText;
 }

@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QuizResult {
     private int id;
-    private String user_username;
-    private int quiz_id;
+    private String userUsername;
+    private int quizId;
     private int score;
 }

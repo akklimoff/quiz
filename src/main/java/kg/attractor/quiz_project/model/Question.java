@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Question {
     private int id;
-    private int quiz_id;
-    private String question_text;
+    private int quizId;
+    private String questionText;
 }

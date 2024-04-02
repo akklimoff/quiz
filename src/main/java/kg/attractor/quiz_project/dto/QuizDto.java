@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -17,5 +19,6 @@ public class QuizDto {
     @NotBlank(message = "Description cannot be blank")
     private String description;
     @NotBlank(message = "Username cannot be blank")
-    private String creator_username;
+    private String creatorUsername;
+    private List<QuestionDto> questions;
 }

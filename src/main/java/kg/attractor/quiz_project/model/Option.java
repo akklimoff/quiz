@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Option {
     private int id;
-    private int question_id;
-    private String option_text;
+    private int questionId;
+    private String optionText;
     private boolean isCorrect;
 }

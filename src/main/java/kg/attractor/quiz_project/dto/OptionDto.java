@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OptionDto {
     private int id;
-    private int question_id;
-    private String option_text;
+    private int questionId;
+    private String optionText;
     private boolean isCorrect;
 }
