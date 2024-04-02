@@ -10,4 +10,5 @@ public interface QuizService {
     List<QuizSummaryDto> getAllQuizzesSummary();
     QuizDetailDto getQuizDetail(int quizId);
     QuizResultDto solveQuiz(int quizId, QuizSubmissionDto submission, Authentication auth);
+    void rateQuiz(int quizId, String username, QuizRatingDto ratingDto);
 }

@@ -3,10 +3,12 @@ package kg.attractor.quiz_project.service.impl;
 import kg.attractor.quiz_project.dao.OptionDao;
 import kg.attractor.quiz_project.dao.QuestionDao;
 import kg.attractor.quiz_project.dao.QuizDao;
+import kg.attractor.quiz_project.dao.QuizResultDao;
 import kg.attractor.quiz_project.dto.*;
 import kg.attractor.quiz_project.model.Option;
 import kg.attractor.quiz_project.model.Question;
 import kg.attractor.quiz_project.model.Quiz;
+import kg.attractor.quiz_project.model.QuizResult;
 import kg.attractor.quiz_project.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -27,6 +30,7 @@ public class QuizServiceImpl implements QuizService {
     private final QuizDao quizDao;
     private final QuestionDao questionDao;
     private final OptionDao optionDao;
+    private final QuizResultDao quizResultDao;
 
     @Override
     @Transactional
@@ -107,6 +111,17 @@ public class QuizServiceImpl implements QuizService {
         result = quizDao.saveQuizResult(result);
 
         return result;
+    }
+
+    @Override
+    @Transactional
+    public void rateQuiz(int quizId, String username, QuizRatingDto ratingDto) {
+        Optional<QuizResult> quizResultOptional = quizResultDao.findByQuizIdAndUsername(quizId, username);
+        QuizResult quizResult = quizResultOptional
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Quiz result not found."));
+        quizResult.setRating(ratingDto.getRating());
+
+        quizResultDao.save(quizResult);
     }
 
 }

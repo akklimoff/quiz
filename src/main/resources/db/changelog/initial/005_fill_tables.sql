@@ -21,9 +21,9 @@ INSERT INTO options (question_id, option_text, is_correct) VALUES
 ((select id from questions where question_text like 'Second question of Quiz 1'), 'Option 1 for Question 2', true),
 ((select id from questions where question_text like 'First question of Quiz 2'), 'Option 1 for Question 3', false);
 
-INSERT INTO quiz_results (user_username, quiz_id, score) VALUES
-((select username from users where email like 'alex@mail.com'), (select id from quizzes where title like 'Quiz 1 Title'), 80),
-((select username from users where email like 'maria@gmail.com'), (select id from quizzes where title like 'Quiz 2 Title'), 90);
+INSERT INTO quiz_results (user_username, quiz_id, score, rating) VALUES
+((select username from users where email like 'alex@mail.com'), (select id from quizzes where title like 'Quiz 1 Title'), 80, null),
+((select username from users where email like 'maria@gmail.com'), (select id from quizzes where title like 'Quiz 2 Title'), 90, null);
 
 INSERT INTO AUTHORITIES (ROLE)
 VALUES

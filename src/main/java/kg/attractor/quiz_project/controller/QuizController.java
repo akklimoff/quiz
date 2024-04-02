@@ -38,4 +38,11 @@ public class QuizController {
         QuizResultDto result = quizService.solveQuiz(quizId, submission, auth);
         return ResponseEntity.ok(result);
     }
+
+    @PostMapping("/{quizId}/rate")
+    public ResponseEntity<?> rateQuiz(@PathVariable int quizId, @RequestBody QuizRatingDto ratingDto, Authentication auth) {
+        String username = auth.getName();
+        quizService.rateQuiz(quizId, username, ratingDto);
+        return ResponseEntity.ok("Rated");
+    }
 }

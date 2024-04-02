@@ -111,6 +111,9 @@ databaseChangeLog:
               - column:
                   name: score
                   type: int
+              - column:
+                  name: rating
+                  type: int
 
 
 
