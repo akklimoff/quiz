@@ -58,6 +58,9 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/api/quizzes/**").hasAuthority("DEFAULT")
                                 .requestMatchers(HttpMethod.DELETE, "/quizzes/**").hasAuthority("DEFAULT")
 
+                                .requestMatchers(HttpMethod.GET, "/api/users/**").hasAuthority("DEFAULT")
+
+
                                 .anyRequest().permitAll()
                 );
         return http.build();

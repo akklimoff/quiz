@@ -52,4 +52,16 @@ public class QuizResultDao {
             return quizResult;
         });
     }
+
+    public List<QuizResult> findByUserId(String userId) {
+        final String sql = "SELECT * FROM quiz_results WHERE user_username = ?";
+
+        return jdbcTemplate.query(sql, new Object[]{userId}, (rs, rowNum) -> new QuizResult(
+                rs.getInt("id"),
+                rs.getString("user_username"),
+                rs.getInt("quiz_id"),
+                rs.getInt("score"),
+                rs.getObject("rating") != null ? rs.getInt("rating") : null
+        ));
+    }
 }
