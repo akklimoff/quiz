@@ -29,4 +29,9 @@ public class QuestionDao {
         question.setId(keyHolder.getKey().intValue());
         return question;
     }
+
+    public int countByQuizId(int quizId) {
+        final String sql = "SELECT COUNT(*) FROM questions WHERE quiz_id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{quizId}, Integer.class);
+    }
 }

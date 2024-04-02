@@ -6,6 +6,7 @@ import kg.attractor.quiz_project.dao.QuizDao;
 import kg.attractor.quiz_project.dto.OptionDto;
 import kg.attractor.quiz_project.dto.QuestionDto;
 import kg.attractor.quiz_project.dto.QuizDto;
+import kg.attractor.quiz_project.dto.QuizSummaryDto;
 import kg.attractor.quiz_project.model.Option;
 import kg.attractor.quiz_project.model.Question;
 import kg.attractor.quiz_project.model.Quiz;
@@ -16,6 +17,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,16 +27,6 @@ public class QuizServiceImpl implements QuizService {
     private final QuizDao quizDao;
     private final QuestionDao questionDao;
     private final OptionDao optionDao;
-//    @Override
-//    public void createQuiz(QuizDto quizDto, Authentication auth) {
-//        String userUsername = auth.getName();
-//        Quiz quiz = Quiz.builder()
-//                .title(quizDto.getTitle())
-//                .description(quizDto.getDescription())
-//                .creator_username(userUsername)
-//                .build();
-//        quizDao.createQuiz(quiz);
-//    }
 
     @Override
     @Transactional
@@ -62,6 +56,18 @@ public class QuizServiceImpl implements QuizService {
                 optionDao.save(option);
             }
         }
+    }
+    @Override
+    public List<QuizSummaryDto> getAllQuizzesSummary() {
+        List<Quiz> quizzes = quizDao.findAll();
+        List<QuizSummaryDto> summaries = new ArrayList<>();
+
+        for (Quiz quiz : quizzes) {
+            int questionCount = questionDao.countByQuizId(quiz.getId());
+            summaries.add(new QuizSummaryDto(quiz.getTitle(), questionCount));
+        }
+
+        return summaries;
     }
 
 }

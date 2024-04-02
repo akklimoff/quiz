@@ -1,14 +1,14 @@
 package kg.attractor.quiz_project.controller;
 
 import kg.attractor.quiz_project.dto.QuizDto;
+import kg.attractor.quiz_project.dto.QuizSummaryDto;
 import kg.attractor.quiz_project.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/quizzes")
@@ -20,5 +20,11 @@ public class QuizController {
     public ResponseEntity<?> createAccount(@RequestBody QuizDto quizDto, Authentication auth) {
         quizService.createQuiz(quizDto, auth);
         return ResponseEntity.ok("Successfully created");
+    }
+
+    @GetMapping
+    public ResponseEntity<List<QuizSummaryDto>> getAllQuizzes() {
+        List<QuizSummaryDto> quizzes = quizService.getAllQuizzesSummary();
+        return ResponseEntity.ok(quizzes);
     }
 }
