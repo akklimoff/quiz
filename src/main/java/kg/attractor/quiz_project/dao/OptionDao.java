@@ -6,11 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.jdbc.core.RowMapper;
-
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
@@ -18,11 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OptionDao {
     private final JdbcTemplate jdbcTemplate;
-
-    public void saveOption(Option option, int questionId) {
-        String sql = "INSERT INTO options (question_id, option_text, is_correct) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, questionId, option.getOptionText(), option.isCorrect());
-    }
 
     public Option save(Option option) {
         final String sql = "INSERT INTO options (question_id, option_text, is_correct) VALUES (?, ?, ?)";
