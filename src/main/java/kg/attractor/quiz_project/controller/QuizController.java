@@ -1,8 +1,6 @@
 package kg.attractor.quiz_project.controller;
 
-import kg.attractor.quiz_project.dto.QuizDetailDto;
-import kg.attractor.quiz_project.dto.QuizDto;
-import kg.attractor.quiz_project.dto.QuizSummaryDto;
+import kg.attractor.quiz_project.dto.*;
 import kg.attractor.quiz_project.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,5 +31,11 @@ public class QuizController {
     public ResponseEntity<QuizDetailDto> getQuizDetail(@PathVariable int quizId) {
         QuizDetailDto quizDetail = quizService.getQuizDetail(quizId);
         return ResponseEntity.ok(quizDetail);
+    }
+
+    @PostMapping("/{quizId}/solve")
+    public ResponseEntity<?> solveQuiz(@PathVariable int quizId, @RequestBody QuizSubmissionDto submission, Authentication auth) {
+        QuizResultDto result = quizService.solveQuiz(quizId, submission, auth);
+        return ResponseEntity.ok(result);
     }
 }

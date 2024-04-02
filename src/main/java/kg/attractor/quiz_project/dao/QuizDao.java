@@ -1,5 +1,6 @@
 package kg.attractor.quiz_project.dao;
 
+import kg.attractor.quiz_project.dto.QuizResultDto;
 import kg.attractor.quiz_project.model.Quiz;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 
@@ -49,4 +51,24 @@ public class QuizDao {
         return jdbcTemplate.queryForObject(sql, new Object[]{id}, new BeanPropertyRowMapper<>(Quiz.class));
     }
 
+    public boolean existsById(int quizId) {
+        final String sql = "SELECT COUNT(*) FROM quizzes WHERE id = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, new Object[]{quizId}, Integer.class);
+        return count != null && count > 0;
+    }
+
+    public QuizResultDto saveQuizResult(QuizResultDto result) {
+        final String sql = "INSERT INTO quiz_results (quiz_id, user_username, score) VALUES (?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, result.getQuizId());
+            ps.setString(2, result.getUserUsername());
+            ps.setInt(3, result.getScore());
+            return ps;
+        }, keyHolder);
+        result.setId(keyHolder.getKey().intValue());
+
+        return result;
+    }
 }

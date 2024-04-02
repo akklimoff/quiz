@@ -10,9 +10,11 @@ import kg.attractor.quiz_project.model.Quiz;
 import kg.attractor.quiz_project.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +83,30 @@ public class QuizServiceImpl implements QuizService {
         }).collect(Collectors.toList());
 
         return new QuizDetailDto(quiz.getId(), quiz.getTitle(), questionDtos);
+    }
+
+    @Override
+    @Transactional
+    public QuizResultDto solveQuiz(int quizId, QuizSubmissionDto submission, Authentication auth) {
+        boolean quizExists = quizDao.existsById(quizId);
+        if (!quizExists) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Quiz with ID " + quizId + " not found");
+        }
+        int correctCount = 0;
+        for (QuestionAnswerDto submittedAnswer : submission.getAnswers()) {
+            Option correctOption = optionDao.findCorrectOptionByQuestionId(submittedAnswer.getQuestionId());
+            if (correctOption != null && submittedAnswer.getOptionIds().contains(correctOption.getId())) {
+                correctCount++;
+            }
+        }
+        QuizResultDto result = QuizResultDto.builder()
+                .quizId(quizId)
+                .userUsername(auth.getName())
+                .score(correctCount)
+                .build();
+        result = quizDao.saveQuizResult(result);
+
+        return result;
     }
 
 }

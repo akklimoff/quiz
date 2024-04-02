@@ -48,4 +48,16 @@ public class OptionDao {
                 .optionText(rs.getString("option_text"))
                 .build());
     }
+
+    public Option findCorrectOptionByQuestionId(int questionId) {
+        final String sql = "SELECT * FROM options WHERE question_id = ? AND is_correct = TRUE";
+        return jdbcTemplate.queryForObject(sql, new Object[]{questionId}, (rs, rowNum) ->
+                Option.builder()
+                        .id(rs.getInt("id"))
+                        .questionId(rs.getInt("question_id"))
+                        .optionText(rs.getString("option_text"))
+                        .isCorrect(rs.getBoolean("is_correct"))
+                        .build()
+        );
+    }
 }
