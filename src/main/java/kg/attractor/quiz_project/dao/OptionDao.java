@@ -6,9 +6,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -34,5 +38,14 @@ public class OptionDao {
 
         option.setId(keyHolder.getKey().intValue());
         return option;
+    }
+
+    public List<Option> findByQuestionId(int questionId) {
+        final String sql = "SELECT * FROM options WHERE question_id = ?";
+        return jdbcTemplate.query(sql, new Object[]{questionId}, (rs, rowNum) -> Option.builder()
+                .id(rs.getInt("id"))
+                .questionId(rs.getInt("question_id"))
+                .optionText(rs.getString("option_text"))
+                .build());
     }
 }

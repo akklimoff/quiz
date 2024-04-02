@@ -3,10 +3,7 @@ package kg.attractor.quiz_project.service.impl;
 import kg.attractor.quiz_project.dao.OptionDao;
 import kg.attractor.quiz_project.dao.QuestionDao;
 import kg.attractor.quiz_project.dao.QuizDao;
-import kg.attractor.quiz_project.dto.OptionDto;
-import kg.attractor.quiz_project.dto.QuestionDto;
-import kg.attractor.quiz_project.dto.QuizDto;
-import kg.attractor.quiz_project.dto.QuizSummaryDto;
+import kg.attractor.quiz_project.dto.*;
 import kg.attractor.quiz_project.model.Option;
 import kg.attractor.quiz_project.model.Question;
 import kg.attractor.quiz_project.model.Quiz;
@@ -19,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -68,6 +66,21 @@ public class QuizServiceImpl implements QuizService {
         }
 
         return summaries;
+    }
+    @Override
+    public QuizDetailDto getQuizDetail(int quizId) {
+        Quiz quiz = quizDao.findById(quizId);
+        List<Question> questions = questionDao.findByQuizId(quizId);
+
+        List<QuestionDto> questionDtos = questions.stream().map(question -> {
+            List<Option> options = optionDao.findByQuestionId(question.getId());
+            List<OptionDto> optionDtos = options.stream()
+                    .map(option -> new OptionDto(option.getId(), option.getOptionText()))
+                    .collect(Collectors.toList());
+            return new QuestionDto(question.getId(), question.getQuestionText(), optionDtos);
+        }).collect(Collectors.toList());
+
+        return new QuizDetailDto(quiz.getId(), quiz.getTitle(), questionDtos);
     }
 
 }

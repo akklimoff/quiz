@@ -1,5 +1,6 @@
 package kg.attractor.quiz_project.dao;
 
+import org.springframework.jdbc.core.RowMapper;
 import kg.attractor.quiz_project.model.Question;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -8,7 +9,10 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -33,5 +37,14 @@ public class QuestionDao {
     public int countByQuizId(int quizId) {
         final String sql = "SELECT COUNT(*) FROM questions WHERE quiz_id = ?";
         return jdbcTemplate.queryForObject(sql, new Object[]{quizId}, Integer.class);
+    }
+
+    public List<Question> findByQuizId(int quizId) {
+        final String sql = "SELECT * FROM questions WHERE quiz_id = ?";
+        return jdbcTemplate.query(sql, new Object[]{quizId}, (rs, rowNum) -> Question.builder()
+                .id(rs.getInt("id"))
+                .quizId(rs.getInt("quiz_id"))
+                .questionText(rs.getString("question_text"))
+                .build());
     }
 }

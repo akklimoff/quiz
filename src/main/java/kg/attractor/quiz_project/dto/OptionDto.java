@@ -14,4 +14,9 @@ public class OptionDto {
     private int questionId;
     private String optionText;
     private boolean isCorrect;
+
+    public OptionDto(int id, String optionText) {
+        this.id = id;
+        this.optionText = optionText;
+    }
 }

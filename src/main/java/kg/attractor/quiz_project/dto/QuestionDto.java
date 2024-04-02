@@ -17,4 +17,10 @@ public class QuestionDto {
     List<OptionDto> options;
     @NotBlank(message = "Question text cannot be blank")
     private String questionText;
+
+    public QuestionDto(int id, String questionText, List<OptionDto> options) {
+        this.id = id;
+        this.questionText = questionText;
+        this.options = options;
+    }
 }

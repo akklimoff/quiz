@@ -1,5 +1,6 @@
 package kg.attractor.quiz_project.controller;
 
+import kg.attractor.quiz_project.dto.QuizDetailDto;
 import kg.attractor.quiz_project.dto.QuizDto;
 import kg.attractor.quiz_project.dto.QuizSummaryDto;
 import kg.attractor.quiz_project.service.QuizService;
@@ -26,5 +27,11 @@ public class QuizController {
     public ResponseEntity<List<QuizSummaryDto>> getAllQuizzes() {
         List<QuizSummaryDto> quizzes = quizService.getAllQuizzesSummary();
         return ResponseEntity.ok(quizzes);
+    }
+
+    @GetMapping("/{quizId}")
+    public ResponseEntity<QuizDetailDto> getQuizDetail(@PathVariable int quizId) {
+        QuizDetailDto quizDetail = quizService.getQuizDetail(quizId);
+        return ResponseEntity.ok(quizDetail);
     }
 }

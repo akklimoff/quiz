@@ -2,6 +2,7 @@ package kg.attractor.quiz_project.dao;
 
 import kg.attractor.quiz_project.model.Quiz;
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -41,6 +42,11 @@ public class QuizDao {
                 .description(rs.getString("description"))
                 .creatorUsername(rs.getString("creator_username"))
                 .build());
+    }
+
+    public Quiz findById(int id) {
+        final String sql = "SELECT * FROM quizzes WHERE id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new BeanPropertyRowMapper<>(Quiz.class));
     }
 
 }
